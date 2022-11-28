@@ -1,0 +1,49 @@
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:resku3/core/app_export.dart';
+import 'package:resku3/presentation/login_screen/login_screen.dart';
+//import 'package:skincare_app/users/authentication/login_screen.dart';
+
+class SplashScreenPage extends StatefulWidget {
+  const SplashScreenPage({Key? key}) : super(key: key);
+
+  @override
+  _SplashScreenPageState createState() => _SplashScreenPageState();
+}
+
+class _SplashScreenPageState extends State<SplashScreenPage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    openSplashScreen();
+  }
+
+  openSplashScreen() async {
+    //bisa diganti beberapa detik sesuai keinginan
+    var durasiSplash = const Duration(seconds: 5);
+
+    return Timer(durasiSplash, () {
+      //pindah ke halaman home
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
+        return LoginScreen();
+      }));
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Center(
+        child: CommonImageView(
+          imagePath: ImageConstant.imgawal,
+          // child: Image.asset(
+          //   "images/awal.png",
+          width: 7680,
+          height: 4320,
+        ),
+      ),
+    );
+  }
+}
