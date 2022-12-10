@@ -11,7 +11,7 @@ class ImageConstant {
 
   static String imageNotFound = 'assets/images/image_not_found.png';
 
-  static String imgprofil = 'assets/duwi.jpeg';
+  static String imgprofil = 'assets/images/profil.png';
 
   static String imgawal = 'assets/images/awal.png';
 }

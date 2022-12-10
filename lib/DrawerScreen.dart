@@ -16,48 +16,76 @@ class _DrawerScreenState extends State<DrawerScreen> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-        backgroundColor: Colors.white,
         child: ListView(
-          children: <Widget>[
-            const UserAccountsDrawerHeader(
-              accountName: Text("Duwi Wirda Septania"),
-              currentAccountPicture:
-                  CircleAvatar(backgroundImage: AssetImage("duwi.jpeg")),
-              accountEmail: Text("duwiwirda8@gmail.com"),
-            ),
-            DrawerListTile(
-                iconData: Icons.logout_sharp,
-                title: "Logout",
-                onTilePressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                            title: Text("Informasi"),
-                            content: Text("Apakah anda yakin ingin keluar ?"),
-                            actions: [
-                              MaterialButton(
-                                color: ColorConstant.red800Bc,
-                                onPressed: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => LoginScreen()));
-                                },
-                                child: Text("YA"),
-                                textColor: ColorConstant.whiteA700,
-                              ),
-                              MaterialButton(
-                                color: ColorConstant.red800Bc,
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text("TIDAK"),
-                                textColor: ColorConstant.whiteA700,
-                              ),
-                            ]);
-                      });
-                })
-          ],
-        ));
+      children: <Widget>[
+        Container(
+            color: ColorConstant.redA700A5,
+            width: double.infinity,
+            height: 200,
+            padding: EdgeInsets.only(top: 20.0),
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Container(
+                margin: EdgeInsets.only(bottom: 10),
+                height: 70,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/profil.png'),
+                  ),
+                ),
+              ),
+              Text(
+                "Duwi Wirda Septania",
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                "Petugas 1",
+                style: TextStyle(
+                  color: Colors.grey[200],
+                  fontSize: 14,
+                ),
+              )
+            ])),
+        SizedBox(
+          height: 10,
+        ),
+        DrawerListTile(
+            iconData: Icons.logout_sharp,
+            title: "Logout",
+            onTilePressed: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                        title: Text("Informasi"),
+                        content: Text("Apakah anda yakin ingin keluar ?"),
+                        actions: [
+                          MaterialButton(
+                            color: ColorConstant.red800Bc,
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => LoginScreen()));
+                            },
+                            child: Text("YA"),
+                            textColor: ColorConstant.whiteA700,
+                          ),
+                          MaterialButton(
+                            color: ColorConstant.red800Bc,
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text("TIDAK"),
+                            textColor: ColorConstant.whiteA700,
+                          ),
+                        ]);
+                  });
+            })
+      ],
+    ));
   }
 }
 

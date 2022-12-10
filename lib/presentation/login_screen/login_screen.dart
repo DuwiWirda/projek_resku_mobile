@@ -161,13 +161,12 @@ class LoginScreen extends StatelessWidget {
                             height: 20,
                           ),
                           Center(
-                            //Container(
-                            // margin: EdgeInsets.only(left: 8.0, right: 5.0),
                             child: MaterialButton(
-                              // minWidth: double.infinity,
                               height: 50.0,
                               minWidth: 200,
-                              color: Color.fromARGB(255, 255, 63, 88),
+                              color: ColorConstant.redA700A5,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
                               textColor: Colors.white,
                               onPressed: () {
                                 String usrname = usernameController.text;

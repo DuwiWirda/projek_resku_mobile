@@ -34,12 +34,9 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
       body: Center(
         child: CommonImageView(
           imagePath: ImageConstant.imgawal,
-          // child: Image.asset(
-          //   "images/awal.png",
           width: 7680,
           height: 4320,
         ),
