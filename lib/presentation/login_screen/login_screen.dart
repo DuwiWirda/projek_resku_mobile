@@ -2,8 +2,7 @@ import 'package:resku3/core/app_export.dart';
 import 'package:resku3/presentation/dashboard_screen/dashboard_screen.dart';
 import 'package:resku3/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
-//import 'package:flutter_native_splash/flutter_native_splash.dart';
-
+ 
 class LoginScreen extends StatelessWidget {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
@@ -110,7 +109,6 @@ class LoginScreen extends StatelessWidget {
                                 padding: EdgeInsets.all(10),
                                 margin: EdgeInsets.only(left: 15.0, right: 10),
                                 child: TextFormField(
-                                  // autofocus: true,
                                   controller: usernameController,
                                   decoration: InputDecoration(
                                       hintText: "Masukkan username",
@@ -139,7 +137,6 @@ class LoginScreen extends StatelessWidget {
                                 padding: EdgeInsets.all(10),
                                 margin: EdgeInsets.only(left: 15.0, right: 10),
                                 child: TextFormField(
-                                  // autofocus: true,
                                   controller: passwordController,
                                   obscureText: true,
                                   decoration: InputDecoration(

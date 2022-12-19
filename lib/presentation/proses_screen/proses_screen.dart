@@ -1,19 +1,56 @@
+import 'dart:convert';
+
 import 'package:resku3/presentation/dashboard_screen/dashboard_screen.dart';
 import 'package:scrollable_table_view/scrollable_table_view.dart';
 import '../proses_screen/proses_item_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:resku3/core/app_export.dart';
 import 'package:resku3/widgets/custom_button.dart';
+import 'package:http/http.dart' as http;
 
-Widget _buildListView() {
-  return ListView.builder(
-      itemCount: 20,
-      itemBuilder: (BuildContext context, index) {
-        return ListTile(title: Text('Item $index'));
-      });
+class ProsesScreen extends StatefulWidget {
+  int? value;
+  ProsesScreen({Key? key, this.value}) : super(key: key);
+
+  @override
+  _ProsesScreenState createState() => _ProsesScreenState(value);
 }
 
-class ProsesScreen extends StatelessWidget {
+class _ProsesScreenState extends State<ProsesScreen> {
+  int? value;
+  _ProsesScreenState(this.value);
+  Map? data;
+  String? uri;
+  @override
+  void initState() {
+    var url = "https://reqres.in/api/users/${value.toString()}";
+    _getRefreshDaata(url);
+
+    print("susu +${value}");
+  }
+
+  Future<void> _getRefreshDaata(url) async {
+    setState(() {
+      uri = url;
+    });
+    var response = await http.get(Uri.parse(uri.toString()),
+        headers: {"Accept": "application/json"});
+    print(response.body);
+    setState(() {
+      var convertDataToJson = jsonDecode(response.body);
+      data = convertDataToJson['data'];
+    });
+  }
+
+  Widget _buildListTile() {
+    return ListTile(
+      title: Text(
+        data!["first_name"],
+      ),
+      subtitle: Text(data!["email"]),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -47,7 +84,7 @@ class ProsesScreen extends StatelessWidget {
                     right: 25,
                   ),
                   child: Text(
-                    "Transaksi",
+                    "Transaksi " + data!["first_name"],
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.left,
                     style: TextStyle(
@@ -76,38 +113,60 @@ class ProsesScreen extends StatelessWidget {
                   ),
                 ),
                 Container(
-                    height: 320,
-                    child: ScrollableTableView(
-                      columns: [
-                        "id_transaksi",
-                        "nama_barang",
-                        "jumlah",
-                        "harga",
-                      ].map((column) {
-                        return TableViewColumn(
-                          label: column,
-                        );
-                      }).toList(),
-                      rows: [
-                        ["PR1000", "jus pisang", "1", "10.000"],
-                        ["PR1000", "nasi goreng", "1", "20.000"],
-                        ["PR1000", "piscok", "1", "8.000"],
-                        ["PR1000", "bakso", "1", "12.000"],
-                        ["PR1000", "karedok", "1", "9.000"],
-                        ["PR1000", "mi goreng", "1", "9.000"],
-                        ["PR1000", "fuyunghai", "1", "19.000"],
-                        ["PR1000", "udang saus mentega", "1", "30.000"],
-                      ].map((record) {
-                        return TableViewRow(
-                          height: 60,
-                          cells: record.map((value) {
-                            return TableViewCell(
-                              child: Text(value),
-                            );
-                          }).toList(),
-                        );
-                      }).toList(),
-                    )),
+                  child: data == null
+                      ? Center(
+                          child: Container(
+                              width: 100,
+                              height: 100,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(6),
+                                  color: Colors.white),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  CircularProgressIndicator(),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text(
+                                    "Loading. . . .",
+                                    style: TextStyle(
+                                      color: ColorConstant.red800,
+                                    ),
+                                  )
+                                ],
+                              )))
+                      : Container(
+                          height: 400,
+                          width: 300,
+                          child: ScrollableTableView(
+                            columns: [
+                              "Nama Barang",
+                              "Jumlah",
+                              "Harga",
+                            ].map((column) {
+                              return TableViewColumn(
+                                label: column,
+                              );
+                            }).toList(),
+                            rows: [
+                              [
+                                data!["first_name"],
+                                data!["first_name"],
+                                data!["first_name"]
+                              ],
+                            ].map((record) {
+                              return TableViewRow(
+                                height: 60,
+                                cells: record.map((value) {
+                                  return TableViewCell(
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                              );
+                            }).toList(),
+                          )),
+                ),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
@@ -273,7 +332,7 @@ class ProsesScreen extends StatelessWidget {
                               child: Text("Bayar"),
                               minWidth: double.infinity,
                               height: 45.0,
-                              color: Color.fromARGB(255, 194, 45, 45),
+                              color: ColorConstant.redA700A5,
                               textColor: Colors.white70,
                               onPressed: () {
                                 showDialog(
@@ -281,7 +340,7 @@ class ProsesScreen extends StatelessWidget {
                                   builder: (context) {
                                     return AlertDialog(
                                       title: Text(""),
-                                      content: Text("transaksi berhasil!"),
+                                      content: Text("Transaksi berhasil !"),
                                       actions: [
                                         TextButton(
                                           onPressed: () {
@@ -301,30 +360,6 @@ class ProsesScreen extends StatelessWidget {
                               }),
                         ),
                       ],
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Padding(
-                    padding: getPadding(
-                      left: 101,
-                      top: 26,
-                      right: 101,
-                      bottom: 7,
-                    ),
-                    child: Text(
-                      "www.myresku.com",
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        color: ColorConstant.gray700,
-                        fontSize: getFontSize(
-                          10,
-                        ),
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w400,
-                      ),
                     ),
                   ),
                 ),

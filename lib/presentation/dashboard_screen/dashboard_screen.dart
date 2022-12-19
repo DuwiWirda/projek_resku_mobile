@@ -1,9 +1,10 @@
+import 'dart:convert';
 import 'package:resku3/DrawerScreen.dart';
 import 'package:resku3/core/app_export.dart';
 import 'package:resku3/presentation/validasi_screen/validasi_screen.dart';
-import 'package:resku3/presentation/validasi_screen/validasi_screen.dart';
 import 'package:resku3/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:resku3/presentation/dashboard_screen/detail_dashboard.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -14,55 +15,95 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  final String url = "https://reqres.in/api/users?page=1";
+  List? data;
+  @override
+  void initState() {
+    _getRefreshDaata();
+    super.initState();
+  }
+
+  Future<void> _getRefreshDaata() async {
+    this.getJsonData(context);
+  }
+
+  Future<void> getJsonData(BuildContext context) async {
+    var response = await http.get(Uri.parse(url), headers: {
+      "Accept": "application/json",
+    });
+    print(response.body);
+    setState(() {
+      var convertDataToJson = jsonDecode(response.body);
+      data = convertDataToJson['data'];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Pesanan"),
-        backgroundColor: ColorConstant.redA700A5,
-        centerTitle: true,
-        actions: const <Widget>[
-          Padding(
-            padding: EdgeInsets.all(8.0),
-          )
-        ],
-      ),
-      drawer: const DrawerScreen(),
-      body: ListView.separated(
-          itemBuilder: (ctx, i) {
-            return ListTile(
-              title: Text(
-                items[i].nomeja,
-                style: const TextStyle(fontWeight: FontWeight.normal),
-              ),
-              trailing: Column(
-                children: <Widget>[
-                  Expanded(
-                      child: MaterialButton(
-                          child: Text(
-                            "CEK",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.normal),
+        appBar: AppBar(
+          title: const Text("Pesanan"),
+          backgroundColor: ColorConstant.redA700A5,
+          centerTitle: true,
+          actions: const <Widget>[
+            Padding(
+              padding: EdgeInsets.all(8.0),
+            )
+          ],
+        ),
+        drawer: const DrawerScreen(),
+        body: RefreshIndicator(
+          onRefresh: _getRefreshDaata,
+          child: data == null
+              ? Center(child: CircularProgressIndicator())
+              : ListView.builder(
+                  itemCount: data == null ? 0 : data!.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                      padding: EdgeInsets.all(5.0),
+                      child: Column(
+                        children: [
+                          GestureDetector(
+                            child: Padding(
+                              padding: EdgeInsets.all(10.0),
+                              child: ListTile(
+                                title: Text(data![index]["first_name"]),
+                                trailing: Column(
+                                  children: <Widget>[
+                                    Expanded(
+                                        child: MaterialButton(
+                                            child: Text(
+                                              "CEK",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight:
+                                                      FontWeight.normal),
+                                            ),
+                                            color: ColorConstant.red800Bc,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20)),
+                                            minWidth: 55,
+                                            onPressed: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (_) =>
+                                                          ValidasiScreen(
+                                                              value:
+                                                                  data![index]
+                                                                      ["id"])));
+                                            }))
+                                  ],
+                                ),
+                              ),
+                            ),
                           ),
-                          color: ColorConstant.red800Bc,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                          minWidth: 55,
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => ValidasiduaScreen()));
-                          }))
-                ],
-              ),
-            );
-          },
-          separatorBuilder: (ctx, i) {
-            return const Divider();
-          },
-          itemCount: items.length),
-    );
+                          Divider()
+                        ],
+                      ),
+                    );
+                  }),
+        ));
   }
 }

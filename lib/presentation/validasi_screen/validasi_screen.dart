@@ -1,20 +1,56 @@
+import 'dart:convert';
+import 'package:scrollable_table_view/scrollable_table_view.dart';
 import 'package:resku3/presentation/dashboard_screen/dashboard_screen.dart';
 import 'package:resku3/presentation/proses_screen/proses_screen.dart';
-
+import 'package:http/http.dart' as http;
 import '../validasi_screen/validasi_item_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:resku3/core/app_export.dart';
 import 'package:resku3/widgets/custom_button.dart';
 
-Widget _buildListView() {
-  return ListView.builder(
-      itemCount: 20,
-      itemBuilder: (BuildContext context, index) {
-        return ListTile(title: Text('Item $index'));
-      });
+class ValidasiScreen extends StatefulWidget {
+  int? value;
+  ValidasiScreen({Key? key, this.value}) : super(key: key);
+
+  @override
+  _ValidasiScreenState createState() => _ValidasiScreenState(value);
 }
 
-class ValidasiduaScreen extends StatelessWidget {
+class _ValidasiScreenState extends State<ValidasiScreen> {
+  int? value;
+  _ValidasiScreenState(this.value);
+  Map? data;
+  String? uri;
+  @override
+  void initState() {
+    var url = "https://reqres.in/api/users/${value.toString()}";
+    _getRefreshDaata(url);
+
+    print("susu +${value}");
+  }
+
+  Future<void> _getRefreshDaata(url) async {
+    setState(() {
+      uri = url;
+    });
+    var response = await http.get(Uri.parse(uri.toString()),
+        headers: {"Accept": "application/json"});
+    print(response.body);
+    setState(() {
+      var convertDataToJson = jsonDecode(response.body);
+      data = convertDataToJson['data'];
+    });
+  }
+
+  // Widget _buildListTile() {
+  //   return ListTile(
+  //     title: Text(
+  //       data!["first_name"],
+  //     ),
+  //     subtitle: Text(data!["email"]),
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -48,7 +84,7 @@ class ValidasiduaScreen extends StatelessWidget {
                   right: 25,
                 ),
                 child: Text(
-                  "Pesanan Meja 01",
+                  "Pesanan " + data!["first_name"],
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.left,
                   style: TextStyle(
@@ -77,11 +113,60 @@ class ValidasiduaScreen extends StatelessWidget {
                 ),
               ),
               Container(
-                  height: 500,
-                  color: Colors.white,
-                  child: Scrollbar(
-                    child: _buildListView(),
-                  )),
+                child: data == null
+                    ? Center(
+                        child: Container(
+                            width: 100,
+                            height: 100,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(6),
+                                color: Colors.white),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                CircularProgressIndicator(),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  "Loading. . . .",
+                                  style: TextStyle(
+                                    color: ColorConstant.red800,
+                                  ),
+                                )
+                              ],
+                            )))
+                    : Container(
+                        height: 400,
+                        width: 300,
+                        child: ScrollableTableView(
+                          columns: [
+                            "Nama Barang",
+                            "Jumlah",
+                            "Harga",
+                          ].map((column) {
+                            return TableViewColumn(
+                              label: column,
+                            );
+                          }).toList(),
+                          rows: [
+                            [
+                              data!["first_name"],
+                              data!["first_name"],
+                              data!["first_name"]
+                            ],
+                          ].map((record) {
+                            return TableViewRow(
+                              height: 60,
+                              cells: record.map((value) {
+                                return TableViewCell(
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                            );
+                          }).toList(),
+                        )),
+              ),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Container(
@@ -93,7 +178,7 @@ class ValidasiduaScreen extends StatelessWidget {
                     top: 8,
                   ),
                   decoration: BoxDecoration(
-                    color: ColorConstant.gray800,
+                    color: ColorConstant.black900,
                   ),
                 ),
               ),
@@ -172,7 +257,8 @@ class ValidasiduaScreen extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => ProsesScreen()),
+                                  builder: (context) =>
+                                      ProsesScreen(value: data!["id"])),
                             );
                           },
                           child: Text(
