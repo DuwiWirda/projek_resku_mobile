@@ -51,7 +51,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             )
           ],
         ),
-        drawer: const DrawerScreen(),
+        // drawer: const DrawerScreen(),
         body: RefreshIndicator(
           onRefresh: _getRefreshDaata,
           child: data == null

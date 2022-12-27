@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:resku3/home.dart';
 import 'package:resku3/presentation/dashboard_screen/dashboard_screen.dart';
 import 'package:scrollable_table_view/scrollable_table_view.dart';
 import '../proses_screen/proses_item_widget.dart';
@@ -64,7 +65,7 @@ class _ProsesScreenState extends State<ProsesScreen> {
             onPressed: (() {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => DashboardScreen()),
+                MaterialPageRoute(builder: (context) => HomeScreen()),
               );
             }),
           ),
@@ -348,7 +349,7 @@ class _ProsesScreenState extends State<ProsesScreen> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      DashboardScreen()),
+                                                      HomeScreen()),
                                             );
                                           },
                                           child: Text("Okay"),

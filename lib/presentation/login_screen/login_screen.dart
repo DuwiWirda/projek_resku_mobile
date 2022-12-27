@@ -1,8 +1,9 @@
 import 'package:resku3/core/app_export.dart';
+import 'package:resku3/home.dart';
 import 'package:resku3/presentation/dashboard_screen/dashboard_screen.dart';
 import 'package:resku3/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
- 
+
 class LoginScreen extends StatelessWidget {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
@@ -177,8 +178,7 @@ class LoginScreen extends StatelessWidget {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            DashboardScreen()),
+                                        builder: (context) => HomeScreen()),
                                   );
                                 } else {
                                   print("username dan password salah");
