@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:resku3/DrawerScreen.dart';
 import 'package:resku3/core/app_export.dart';
+import 'package:resku3/presentation/login_screen/login_screen.dart';
 import 'package:resku3/presentation/validasi_screen/validasi_screen.dart';
 import 'package:resku3/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
@@ -45,10 +46,39 @@ class _DashboardScreenState extends State<DashboardScreen> {
           title: const Text("Pesanan"),
           backgroundColor: ColorConstant.redA700A5,
           centerTitle: true,
-          actions: const <Widget>[
-            Padding(
-              padding: EdgeInsets.all(8.0),
-            )
+          actions: [
+            Theme(
+              data: Theme.of(context).copyWith(
+                  textTheme: TextTheme().apply(bodyColor: Colors.white),
+                  dividerColor: Colors.white,
+                  iconTheme: IconThemeData(color: Colors.white)),
+              child: PopupMenuButton<int>(
+                color: Colors.white,
+                itemBuilder: (context) => [
+                  // PopupMenuItem<int>(value: 0, child: Text("Setting")),
+                  // PopupMenuItem<int>(value: 1, child: Text("Privacy")),
+                  // PopupMenuDivider(),
+                  PopupMenuItem<int>(
+                      value: 0,
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.logout,
+                            color: ColorConstant.red800Bc,
+                          ),
+                          const SizedBox(
+                            width: 7,
+                          ),
+                          Text(
+                            "Logout",
+                            style: TextStyle(color: ColorConstant.red800Bc),
+                          )
+                        ],
+                      )),
+                ],
+                onSelected: (item) => SelectedItem(context, item),
+              ),
+            ),
           ],
         ),
         // drawer: const DrawerScreen(),
@@ -99,11 +129,53 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               ),
                             ),
                           ),
-                          Divider()
+                          // Divider()
                         ],
                       ),
                     );
                   }),
         ));
+  }
+
+  void SelectedItem(BuildContext context, item) {
+    switch (item) {
+      // case 0:
+      //   Navigator.of(context)
+      //       .push(MaterialPageRoute(builder: (context) => LoginScreen()));
+      //   break;
+      // case 1:
+      //   print("Privacy Clicked");
+      //   break;
+      case 0:
+        print("User Logged out");
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                  title: Text("Informasi"),
+                  content: Text("Apakah anda yakin ingin keluar ?"),
+                  actions: [
+                    MaterialButton(
+                      color: ColorConstant.red800Bc,
+                      onPressed: () {
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (context) => LoginScreen()),
+                            (route) => false);
+                      },
+                      child: Text("YA"),
+                      textColor: ColorConstant.whiteA700,
+                    ),
+                    MaterialButton(
+                      color: ColorConstant.red800Bc,
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text("TIDAK"),
+                      textColor: ColorConstant.whiteA700,
+                    ),
+                  ]);
+            });
+    }
   }
 }

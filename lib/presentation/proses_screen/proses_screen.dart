@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:resku3/home.dart';
 import 'package:resku3/presentation/dashboard_screen/dashboard_screen.dart';
+import 'package:resku3/presentation/validasi_screen/validasi_screen.dart';
 import 'package:scrollable_table_view/scrollable_table_view.dart';
 import '../proses_screen/proses_item_widget.dart';
 import 'package:flutter/material.dart';
@@ -63,9 +64,9 @@ class _ProsesScreenState extends State<ProsesScreen> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: (() {
-              Navigator.push(
+              Navigator.pop(
                 context,
-                MaterialPageRoute(builder: (context) => HomeScreen()),
+                MaterialPageRoute(builder: (context) => ValidasiScreen()),
               );
             }),
           ),
@@ -345,12 +346,12 @@ class _ProsesScreenState extends State<ProsesScreen> {
                                       actions: [
                                         TextButton(
                                           onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      HomeScreen()),
-                                            );
+                                            Navigator.of(context)
+                                                .pushAndRemoveUntil(
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            DashboardScreen()),
+                                                    (route) => false);
                                           },
                                           child: Text("Okay"),
                                         ),

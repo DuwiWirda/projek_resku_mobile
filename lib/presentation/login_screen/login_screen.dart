@@ -175,11 +175,11 @@ class LoginScreen extends StatelessWidget {
                                       SnackBar(
                                           content: Text(
                                               "username dan password benar")));
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => HomeScreen()),
-                                  );
+                                  Navigator.of(context).pushAndRemoveUntil(
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              DashboardScreen()),
+                                      (route) => false);
                                 } else {
                                   print("username dan password salah");
                                   ScaffoldMessenger.of(context).showSnackBar(

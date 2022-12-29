@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:resku3/home.dart';
+import 'package:resku3/presentation/dashboard_screen/detail_dashboard.dart';
 import 'package:scrollable_table_view/scrollable_table_view.dart';
 import 'package:resku3/presentation/dashboard_screen/dashboard_screen.dart';
 import 'package:resku3/presentation/proses_screen/proses_screen.dart';
@@ -63,9 +64,9 @@ class _ValidasiScreenState extends State<ValidasiScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: (() {
-            Navigator.push(
+            Navigator.pop(
               context,
-              MaterialPageRoute(builder: (context) => HomeScreen()),
+              MaterialPageRoute(builder: (context) => DashboardScreen()),
             );
           }),
         ),
